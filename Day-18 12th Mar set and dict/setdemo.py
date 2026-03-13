@@ -4,9 +4,9 @@
 
 #empty set
 # set1={}
-# print(set1,type(set1))
+# print(set1,type(set1)) #dictionary
 # s=set()
-# print(s,type(s))
+# print(s,type(s)) #set
 # s1={12,"hello",True,None,56j,67.89}
 # print(s1,type(s1))
 
