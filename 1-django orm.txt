@@ -1,0 +1,257 @@
+-- show all books
+select * from app_books;
+--ORM
+Books.objects.all()
+
+-- insert new row
+insert into app_books values(,,,);
+--ORM
+b=Books.objects.create(colname='',,,,)
+b.save()
+
+-- update old row
+update app_books set colname='' where condition;
+--ORM
+x=Books.objects.get(bookid=101)
+x.photo='pics/lion1.jpg'
+x.save()
+
+-- delete row
+delete from app_books where colname='';
+--ORM
+k=Books.objects.get(bookid=102)
+k.delete()
+x.delete()
+
+------------
+1.find book whose title is 'python'
+Books.objects.filter(title='Python') 
+
+2.find books details whose contains title as 'htm'
+Books.objects.filter(title__icontains='html')
+
+3.find books details except  title as 'python'
+Books.objects.exclude(title='python') 
+
+4.display books record as per title in ascending order
+Books.objects.order_by('title')    
+
+5.display books record as per title in descending order
+Books.objects.order_by('-title')    
+
+6.Count total number of books
+Books.objects.count()
+
+7.Find the maximum price of a book
+from django.db.models import Max
+Books.objects.aggregate(Max('price'))
+
+8.Find the minimum price of a book
+from django.db.models import Min
+Books.objects.aggregate(Min('price'))
+
+9.Find the average price of all books
+from django.db.models import Avg
+Books.objects.aggregate(Avg('price'))
+
+10.Sum of all book prices
+from django.db.models import Sum
+Books.objects.aggregate(Sum('price'))
+
+11.Get distinct titles from books
+Books.objects.values('title').distinct()
+
+12.Filter books with price greater than 500
+Books.objects.filter(price__gt=500)
+
+13.Filter books with price less than or equal to 300
+Books.objects.filter(price__lte=300)
+
+14.Get books with title starting with 'Django'
+Books.objects.filter(title__startswith='Django')
+
+15.Get books with title ending with 'Guide'
+Books.objects.filter(title__endswith='Guide')
+
+16.Filter books whose price is between 100 and 500
+Books.objects.filter(price__range=(100, 500))
+
+17.Find books by multiple conditions (AND)
+Books.objects.filter(author='John', price__gt=300)
+
+18. Find books by multiple conditions (OR)
+from django.db.models import Q
+Books.objects.filter(Q(author='Alice') | Q(price__lt=200))
+
+19. Find books that do not have a price value (NULL)
+Books.objects.filter(price__isnull=True)
+
+
+-----------------
+
+
+ORM(Object Relational Model)
+-------------------
+1)all books
+Book.objects.all()
+
+2)insert book
+b=Book.objects.create(col=val,...)
+b.save()
+
+3) search book by isbn
+Book.objects.get(isbn=101) (not found then throws error)
+or
+Book.objects.filter(isbn=101)
+
+4) To update author for isbn=103
+x=Book.objects.get(isbn=103) 
+x.author='tim lee'
+x.save()
+
+5) To delete book isbn=103
+k=Book.objects.get(isbn=103) 
+k.delete()
+
+6) find book whoes title is python
+Book.objects.filter(title='python')
+or
+Book.objects.filter(title__icontains='python')
+or
+Book.objects.filter(title__contains='python')
+
+6) find book whoes category is database and price 500
+Book.objects.filter(categry='database',price=500)
+
+7) find book whoes category is database or price 500
+from django.db.models import Q
+Book.objects.filter(Q(category='database')|Q(price=500))
+
+https://docs.djangoproject.com/en/5.1/topics/db/queries/
+
+E:\6-BR411\Day-14 Django ORM-Project>call myenv1\Scripts\activate.bat
+
+(myenv1) E:\6-BR411\Day-14 Django ORM-Project>cd ormproject
+
+(myenv1) E:\6-BR411\Day-14 Django ORM-Project\ormproject>py manage.py shell
+Python 3.12.4 (tags/v3.12.4:8e8a4ba, Jun  6 2024, 19:30:16) [MSC v.1940 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from app.models import Books
+>>> Books.objects.all()
+<QuerySet [<Books: Books object (101)>, <Books: Books object (102)>, <Books: Books object (103)>, <Books: Books object (107)>, <Books: Books object (110)>, <Books: Books object (111)>]>
+
+>>> p=Books.objects.create(bookid=201,isbn=1111,title='sql',author='singh',price=700,category='IT',photo=None)
+
+>>> p.save()
+
+>>> Books.objects.all()
+<QuerySet [<Books: Books object (101)>, <Books: Books object (102)>, <Books: Books object (103)>, <Books: Books object (107)>, <Books: Books object (110)>, <Books: Books object (111)>, <Books: Books object (201)>]>
+
+>>> x=Books.objects.get(bookid=201)
+>>> x.photo='pics/lion1.jpg'
+>>> x.save()
+>>> x
+<Books: Books object (201)>
+
+>>> k=Books.objects.get(bookid=201)
+>>> k.delete()
+(1, {'app.Books': 1})
+>>> Books.objects.all()
+<QuerySet [<Books: Books object (101)>, <Books: Books object (102)>, <Books: Books object (103)>, <Books: Books object (107)>, <Books: Books object (110)>, <Books: Books object (111)>]>
+
+>>> Books.objects.filter(title='Python') 
+<QuerySet [<Books: Books object (101)>]>
+
+>>> Books.objects.filter(title__contains='htm')
+<QuerySet []>
+
+>>> Books.objects.filter(title__contains='html') 
+<QuerySet []>
+
+>>> Books.objects.filter(title__icontains='html')
+<QuerySet [<Books: Books object (103)>]>
+
+>>> Books.objects.filter(title__icontains='t')    
+<QuerySet [<Books: Books object (101)>, <Books: Books object (102)>, <Books: Books object (103)>, <Books: Books object (111)>]>
+
+>>> Books.objects.filter(title__icontains='htm')  
+<QuerySet [<Books: Books object (103)>]>
+
+>>> Books.objects.exclude(title='python')       
+<QuerySet [<Books: Books object (102)>, <Books: Books object (103)>, <Books: Books object (107)>, <Books: Books object (110)>, <Books: Books object (111)>]>
+
+>>> Books.objects.order_by('title')      
+<QuerySet [<Books: Books object (110)>, <Books: Books object (107)>, <Books: Books object (103)>, <Books: Books object (102)>, <Books: Books object (101)>, <Books: Books object (111)>]>
+
+>>> Books.objects.all()            
+<QuerySet [<Books: Books object (101)>, <Books: Books object (102)>, <Books: Books object (103)>, <Books: Books object (107)>, <Books: Books object (110)>, <Books: Books object (111)>]>
+
+>>> Books.objects.order_by('-title') 
+<QuerySet [<Books: Books object (111)>, <Books: Books object
+
+>>> Books.objects.filter(title__startswith="P")
+
+>>> Books.objects.filter(title__endswith="n")
+
+>>> Entry.objects.all()[:5]
+>>> Entry.objects.all()[5:10]
+>>> Entry.objects.all()[:10:2]
+>>> Entry.objects.filter(pub_date__lte="2006-01-01")
+>>> Blog.objects.get(id__exact=14)
+>>> Blog.objects.get(name__iexact="beatles blog")
+>>> Blog.objects.filter(entry__authors__name__isnull=True)
+>>> Blog.objects.filter(entry__authors__isnull=False, entry__authors__name__isnull=True)
+>>> Blog.objects.filter(entry__headline__contains="Lennon").filter(
+    entry__pub_date__year=2008
+)
+
+>>> from datetime import timedelta
+>>> Entry.objects.filter(mod_date__gt=F("pub_date") + timedelta(days=3))
+
+>>> from django.db.models import Min
+>>> Entry.objects.aggregate(first_published_year=Min("pub_date__year"))
+
+>>> from django.db.models import OuterRef, Subquery, Sum
+>>> Entry.objects.values("pub_date__year").annotate(
+...     top_rating=Subquery(
+...         Entry.objects.filter(
+...             pub_date__year=OuterRef("pub_date__year"),
+...         )
+...         .order_by("-rating")
+...         .values("rating")[:1]
+...     ),
+...     total_comments=Sum("number_of_comments"),
+... )
+
+
+>>> Blog.objects.filter(pk__in=[1, 4, 7])
+
+
+from django.db.models import Q
+Poll.objects.get(
+    Q(question__startswith="Who"),
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+)
+
+
+>>> queryset = Entry.objects.all()
+>>> print([p.headline for p in queryset]) 
+
+>>> queryset = Entry.objects.all()
+>>> print(queryset[5])  # Queries the database
+>>> print(queryset[5])  # Queries the database again
+
+
+
+
+
+
+
+
+
+
+
+
+
+
